@@ -68,11 +68,6 @@ class Biblioteca:
             if emprestimo.esta_atrasado():
                 emprestimo.usuario.em_atraso = True
 
-    def verificar_atrasos(self):
-        for emprestimo in self.emprestimos:
-            if emprestimo.esta_atrasado():
-                emprestimo.usuario.em_atraso = True
-
     def buscar_usuario(self, nome):
         for usuario in self.usuarios:
             if usuario.nome.lower() == nome.lower():
