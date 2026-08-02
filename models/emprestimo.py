@@ -1,37 +1,20 @@
-from datetime import date, timedelta
+from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Date
+from sqlalchemy.orm import relationship
+from base import Base
+from datetime import date
 
-class Emprestimo:
-    def __init__(self, livro, usuario):
-        self.usuario = usuario
-        self.livro = livro
-        self.data_emprestimo = date.today()
-        self.data_devolucao = self.data_emprestimo + timedelta(days=14)
-        self.devolvido = False
-        self.data_devolucao_real = None
+class Emprestimo(Base):
+    __tablename__ = "emprestimos"
+
+    id = Column(Integer, primary_key=True)
+    usuario_id = Column(Integer, ForeignKey("usuarios.id"))
+    livro_id = Column(Integer, ForeignKey("livros.id"))
+    data_emprestimo = Column(Date, nullable=False, default=date.today)
+    data_devolucao = Column(Date, nullable=False)
+    devolvido = Column(Boolean)
+    data_devolucao_real = Column(Date, nullable=True)
+
+    usuario = relationship("Usuario")
+    livro = relationship("Livro")
 
     
-    def esta_atrasado(self):
-        if self.devolvido:
-            return False
-        return date.today() > self.data_devolucao
-    
-    def __str__(self):
-        status = "Devolvido" if self.devolvido else ("Atrasado" if self.esta_atrasado() else "Ativo")
-        return(
-            f"Livro: {self.livro.titulo}\n"
-            f"Usuário: {self.usuario.nome}\n"
-            f"Emprestado em: {self.data_emprestimo}\n"
-            f"Devolver até: {self.data_devolucao}\n"
-            f"Status: {status}"
-        )
-    
-    def to_dict(self):
-        return {
-            "usuario": self.usuario.nome, 
-            "livro": self.livro.titulo,
-            "data_emprestimo": str(self.data_emprestimo),
-            "data_devolucao": str(self.data_devolucao),
-            "data_devolucao_real": str(self.data_devolucao_real) if self.data_devolucao_real else None,
-            "devolvido": self.devolvido
-        }
-

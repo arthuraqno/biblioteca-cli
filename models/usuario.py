@@ -1,30 +1,16 @@
-import random
+from sqlalchemy import Integer, String, Column, Boolean
+from base import Base
 
-class Usuario:
-    matriculas_usadas = []
+class Usuario(Base):
+    __tablename__ = 'usuarios'
 
-    def __init__(self, nome, telefone):
-        self.nome = nome
-        self.telefone = telefone
-        self.matricula = self._gerar_matricula()
-        self.em_atraso = False
-
-
-    def _gerar_matricula(self):
-        while True:
-            matricula = random.randint(1000, 9999)
-            if matricula not in Usuario.matriculas_usadas:
-                Usuario.matriculas_usadas.append(matricula)
-                return matricula
-
+    id = Column(Integer, primary_key=True)
+    nome = Column(String(100), nullable=False)
+    telefone = Column(String(50), nullable=False)
+    matricula = Column(Integer, nullable=False)
+    em_atraso = Column(Boolean)
+    
+    
     def __str__(self):
-        situacao = "Em atraso" if self.em_atraso else "Regular"
-        return f"[{self.matricula}] {self.nome} | Telefone: {self.telefone}" 
-
-    def to_dict(self):
-        return {
-            "matricula": self.matricula,
-            "nome": self.nome,
-            "telefone": self.telefone,
-            "em_atraso": self.em_atraso
-        } 
+        status = "Em atraso" if self.em_atraso else "Regular"
+        return f"[{self.id}] {self.nome} | Tel: {self.telefone} | Matrícula: {self.matricula} | {status}"

@@ -3,8 +3,6 @@ from models.usuario import Usuario
 from services.biblioteca import Biblioteca
 
 biblioteca = Biblioteca()
-biblioteca.carregar_dados()
-biblioteca.verificar_atrasos()
 
 def menu():
     while True:
@@ -23,42 +21,23 @@ def menu():
         opcao = input("Escolha uma opção: ")
 
         if opcao == "1":
-            isbn = int(input("ISBN: "))
             titulo = input("Título: ")
             autor = input("Autor: ")
-            ano = int(input("Ano: "))
-            livro = Livro(isbn, titulo, autor, ano)
-            biblioteca.cadastrar_livro(livro)
-
+            ano_publicacao = int(input("Ano: "))
+            biblioteca.cadastrar_livros(titulo, autor, ano_publicacao, disponivel=True)
         elif opcao == "2":
             nome = input("Nome: ")
             telefone = input("Telefone: ")
-            usuario = Usuario(nome, telefone)
-            biblioteca.cadastrar_usuario(usuario)
-
+            matricula = int(input("Matricula: "))
+            biblioteca.cadastrar_usuarios(nome, telefone, matricula, em_atraso=False)
         elif opcao == "3":
             titulo = input("Título do livro: ")
             nome = input("Nome do usuário: ")
-            livro = biblioteca.buscar_livro(titulo)
-            usuario = biblioteca.buscar_usuario(nome)
-            if livro is None:
-                print("Livro não encontrado.")
-            elif usuario is None:
-                print("Usuário não encontrado.")
-            else:
-                biblioteca.emprestar_livro(livro, usuario)
-
+            biblioteca.emprestar_livro(titulo, nome)
         elif opcao == "4":
             titulo = input("Título do livro: ")
             nome = input("Nome do usuário: ")
-            livro = biblioteca.buscar_livro(titulo)
-            usuario = biblioteca.buscar_usuario(nome)
-            if livro is None:
-                print("Livro não encontrado.")
-            elif usuario is None:
-                print("Usuário não encontrado.")
-            else:
-                biblioteca.devolver_livro(livro, usuario)
+            biblioteca.devolver_livro(titulo, nome)
 
         elif opcao == "5":
             biblioteca.listar_livros()
@@ -67,7 +46,6 @@ def menu():
             biblioteca.listar_usuarios()
 
         elif opcao == "7":
-            biblioteca.salvar_dados()
             print("Encerrando o sistema. Até logo!")
             break
 

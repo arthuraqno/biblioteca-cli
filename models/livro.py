@@ -1,20 +1,15 @@
-class Livro:
-    def __init__(self, isbn, titulo, autor, ano_publicacao):
-        self.isbn = isbn
-        self.titulo = titulo
-        self.autor = autor
-        self.ano_publicacao = ano_publicacao
-        self.disponivel = True
+from sqlalchemy import Column, String, Integer, ForeignKey, Boolean
+from base import Base
 
-    def __str__(self):
-        status = "Disponível" if self.disponivel else "Indisponível"
-        return f"[{self.isbn}] {self.titulo} by {self.autor} ({self.ano_publicacao})"
+class Livro(Base):
+    __tablename__ = "livros"
+
+    id = Column(Integer, primary_key=True)
+    titulo = Column(String(100))
+    autor = Column(String(100), nullable=False)
+    ano_publicacao = Column(Integer)
+    disponivel = Column(Boolean)
     
-    def to_dict(self):
-        return {
-            "isbn": self.isbn,
-            "titulo": self.titulo,
-            "autor": self.autor,
-            "ano_publicacao": self.ano_publicacao,
-            "disponivel": self.disponivel
-        }
+    def __str__(self):
+        status = "Disponível" if self.disponivel else "Emprestado"
+        return f"[{self.id}] {self.titulo} | {self.autor} | Ano: {self.ano_publicacao} | {status}"
